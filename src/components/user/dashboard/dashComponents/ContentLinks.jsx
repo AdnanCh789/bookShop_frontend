@@ -12,6 +12,7 @@ function ContentLinks(props) {
     { name: "Update Profile", link: `/profile/${user._id}` },
   ];
   const adminLinks = [
+    { name: "Update Profile", link: `/admin/profile/${user._id}` },
     { name: "Create Category", link: "/create/category" },
     { name: "Create Product", link: "/create/product" },
     { name: "View Orders", link: "/admin/orders" },

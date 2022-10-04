@@ -1,9 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
 
-import { store } from "./app/store";
 import PageRoutes from "./PageRoutes";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -14,8 +12,6 @@ const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
-    <Provider store={store}>
-      <PageRoutes />
-    </Provider>
+    <PageRoutes />
   </BrowserRouter>
 );

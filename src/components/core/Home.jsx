@@ -1,38 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
-import http from "../../services/httpService";
-import { API } from "../../config";
+import Search from "./Search";
+import { getProducts } from "./Api";
 import Layout from "./Layout";
 import ProductCard from "./ProductCard";
 
 const Home = () => {
   const [productsBySell, setProductsBySell] = useState([]);
+  const [productsByArrival, setProductsByArrival] = useState([]);
 
   const soldProducts = async () => {
-    try {
-      const { data } = await http.get(
-        `${API}/product/?sortBy=sold&order=asc&limit=3`
-      );
-      //   console.log(data);
-      setProductsBySell({ productsBySell: data });
-      //   console.log(productsBySell);
-    } catch (error) {
-      console.log(error);
-    }
+    const { data } = await getProducts("sold");
+
+    setProductsBySell(data);
+  };
+  const newProducts = async () => {
+    const { data } = await getProducts("createdAt");
+
+    setProductsByArrival(data);
   };
 
   useEffect(() => {
     soldProducts();
+    newProducts();
   }, []);
-
-  const example = () => {
-    if (productsBySell.length !== 0 && typeof productsBySell === "object") {
-      productsBySell.map((p, i) => <ProductCard key={i} product={p} />);
-    } else {
-      return;
-    }
-  };
-
   return (
     <React.Fragment>
       <Menu />
@@ -41,13 +32,21 @@ const Home = () => {
         description="E-Commerce App for web development courses and books."
         className="container-fluid"
       >
-        <h2>Products By Sell</h2>
-        {/* {example()} */}
-
-        {console.log(productsBySell)}
-        {/* {productsBySell.map((product, i) => (
-          <ProductCard key={i} product={product} />
-        ))} */}
+        <Search />
+        <div className="row">
+          <div className="col-6">
+            <h2>Best Sells</h2>
+            {productsBySell?.map((product, i) => (
+              <ProductCard key={i} product={product} />
+            ))}
+          </div>
+          <div className="col-6">
+            <h2>New Arrivals</h2>
+            {productsByArrival?.map((product, i) => (
+              <ProductCard key={i} product={product} />
+            ))}
+          </div>
+        </div>
       </Layout>
     </React.Fragment>
   );

@@ -35,3 +35,7 @@ export function getCurrentUser() {
     return null;
   }
 }
+
+export const saveTokenLS = (data) => {
+  localStorage.setItem("jwt", JSON.stringify(data));
+};

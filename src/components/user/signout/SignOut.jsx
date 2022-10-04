@@ -5,6 +5,7 @@ import { API } from "../../../config";
 
 const SignOut = () => {
   localStorage.removeItem("jwt");
+  window.location = "/";
   return <Navigate to="/signin" />;
 };
 

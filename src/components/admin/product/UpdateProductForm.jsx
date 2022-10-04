@@ -5,9 +5,12 @@ import TextArea from "../../common/TextArea";
 import Select from "../../common/Select";
 import { ShowError } from "../../helper/helper";
 import { ShowSuccess } from "../../helper/helper";
-import { createProduct } from "../ApiAdmin";
+import { getProduct, updateProduct } from "../ApiAdmin";
+import { useParams } from "react-router-dom";
 
-function ProductForm() {
+function UpdateProductForm() {
+  const { productId } = useParams();
+
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -18,7 +21,7 @@ function ProductForm() {
     photo: "",
     formData: "",
     loading: false,
-    error: "",
+    error: false,
     success: false,
   });
 
@@ -37,7 +40,16 @@ function ProductForm() {
 
   const init = async () => {
     const { data } = await getCategories();
-    setValues({ ...values, categories: data, formData: new FormData() });
+    const res = await getProduct(productId);
+    setValues({
+      name: res.data.name,
+      description: res.data.description,
+      quantity: res.data.quantity,
+      price: res.data.price,
+      category: res.data.category,
+      formData: new FormData(),
+      categories: data,
+    });
   };
 
   const handleChange = (name) => (e) => {
@@ -53,7 +65,7 @@ function ProductForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createProduct(formData);
+      await updateProduct(productId, formData);
       setValues({ ...values, success: true, error: "" });
     } catch (ex) {
       setValues({ ...values, error: ex.response.data, success: false });
@@ -63,10 +75,7 @@ function ProductForm() {
   return (
     <Fragment>
       <ShowError error={error} />
-      <ShowSuccess
-        success={success}
-        successMessage="New Product is Created.."
-      />
+      <ShowSuccess success={success} successMessage="Product is Updated.." />
       <form onSubmit={handleSubmit} className="mt-2">
         <div>
           <Input
@@ -89,6 +98,7 @@ function ProductForm() {
             name="category"
             label="Category"
             categories={categories}
+            category={category}
             onChange={handleChange("category")}
           />
         </div>
@@ -115,10 +125,10 @@ function ProductForm() {
           <input type="file" name="photo" onChange={handleChange("photo")} />
         </div>
 
-        <button className="btn btn-primary mt-3">Create Product</button>
+        <button className="btn btn-warning mt-3">Update Product</button>
       </form>
     </Fragment>
   );
 }
 
-export default ProductForm;
+export default UpdateProductForm;

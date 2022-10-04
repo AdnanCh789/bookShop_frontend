@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import http from "../../../services/httpService";
 import Input from "../../common/Input";
-import { ShowError, RedirectUser } from "../../helper/helper";
+import { ShowError, RedirectUser, saveTokenLS } from "../../helper/helper";
 
 import { API } from "../../../config";
 
@@ -16,10 +16,6 @@ function SignInForm(props) {
 
   const { email, password, error, redirect } = values;
 
-  const saveTokenLS = (data) => {
-    localStorage.setItem("jwt", JSON.stringify(data));
-  };
-
   const handleChange = (name) => (event) => {
     setValues({ ...values, error: false, [name]: event.target.value });
   };
@@ -33,6 +29,7 @@ function SignInForm(props) {
 
       setValues({ ...values, error: "", redirect: true });
       saveTokenLS(response.headers["x-auth-token"]);
+      window.location = "/";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         console.log(ex.response);
