@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { pricess } from "./priceRanges";
 
 function RadioBtn({ pricess, handleFilters }) {
   const [price, setPrice] = useState([]);

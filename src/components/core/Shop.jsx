@@ -16,7 +16,6 @@ function Shop(props) {
   const [error, setError] = useState(false);
   const [limit, setLimit] = useState(4);
   const [skip, setSkip] = useState(0);
-  const [size, setSize] = useState(0);
 
   const handleFilters = (filters, filterBy) => {
     const allFilters = { ...myFilters };
@@ -27,28 +26,9 @@ function Shop(props) {
   };
   const loadFilteredData = async (newFilters) => {
     const { data } = await productBySearch(limit, skip, newFilters);
+
     setLoadedResult(data.data);
-    setSize(data.size);
   };
-  const loadMore = async () => {
-    let toSkip = skip + limit;
-    const { data } = await productBySearch(limit, toSkip, myFilters.filters);
-    setLoadedResult([...loadedResult, ...data.data]);
-    setSize(data.size);
-    setSkip(toSkip);
-  };
-
-  const loadMoreButton = () => {
-    return (
-      size > 0 &&
-      size >= limit && (
-        <button onClick={() => loadMore()} className="btn-btn-warning">
-          Load More
-        </button>
-      )
-    );
-  };
-
   const init = async () => {
     const { data } = await getCategories();
     setCategories(data);
@@ -82,14 +62,13 @@ function Shop(props) {
             />
           </ul>
         </div>
-        <div className="col-4">
+        <div className="col-8">
           <h2>Products</h2>
           <div className="row">
             {loadedResult.map((product, i) => (
               <ProductCard key={i} product={product} />
             ))}
           </div>
-          {loadMoreButton()}
         </div>
       </div>
     </Layout>

@@ -41,6 +41,7 @@ function SearchForm(props) {
     <div>
       <form onSubmit={handleSubmit}>
         <span className="input-group-text">
+          {/* <div className="input-group input-group-lg"> */}
           <div className="input-group-prepend">
             <select
               onChange={handleChange("category")}
